@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Little Surprise For You 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --pink:#FFB6C1;--pink2:#FF85A1;--pink3:#FF4D8D;--pink4:#FFD6E0;--pink5:#FFF0F3;
+    --cream:#FFFAF8;--gold:#FFD700;--lilac:#E8D5F5;--mint:#D5F5E3;
+    --shadow:0 8px 32px rgba(255,100,130,0.15);
+  }
+  html,body{height:100%;overflow:hidden;background:var(--cream)}
+  body{font-family:'Nunito',sans-serif}
+  
+  /* PAGE SYSTEM */
+  .page{
+    position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:flex-start;padding:20px 20px 30px;overflow-y:auto;
+    background:linear-gradient(160deg,#FFF0F3 0%,#FFF5F8 40%,#FFFAF8 100%);
+    opacity:0;pointer-events:none;transition:opacity 0.5s,transform 0.5s;
+    transform:translateY(30px);
+  }
+  .page.active{opacity:1;pointer-events:all;transform:translateY(0)}
+  .page.exit{opacity:0;transform:translateY(-30px)}
+
+  /* DECORATIVE BG DOTS */
+  .page::before{
+    content:'';position:fixed;inset:0;
+    background-image:radial-gradient(circle,#FFB6C1 1px,transparent 1px);
+    background-size:28px 28px;opacity:0.18;pointer-events:none;z-index:0;
+  }
+  .page>*{position:relative;z-index:1}
+
+  /* TYPOGRAPHY */
+  .title-font{font-family:'Pacifico',cursive}
+  .script-font{font-family:'Dancing Script',cursive}
+  h1{font-family:'Pacifico',cursive;color:var(--pink3);text-shadow:2px 2px 0 rgba(255,77,141,0.15)}
+  h2{font-family:'Dancing Script',cursive;color:#E05080;font-size:1.9rem}
+
+  /* CARDS */
+  .card{
+    background:rgba(255,255,255,0.88);border-radius:24px;padding:24px;
+    box-shadow:0 8px 32px rgba(255,100,130,0.13),0 2px 8px rgba(255,100,130,0.08);
+    border:1.5px solid rgba(255,182,193,0.4);width:100%;max-width:400px;
+    backdrop-filter:blur(8px);
+  }
+
+  /* BUTTONS */
+  .btn-pink{
+    background:linear-gradient(135deg,var(--pink2),var(--pink3));
+    color:white;border:none;border-radius:50px;padding:14px 36px;
+    font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+    cursor:pointer;box-shadow:0 4px 18px rgba(255,85,141,0.35);
+    transition:all 0.22s;letter-spacing:0.5px;
+  }
+  .btn-pink:active{transform:scale(0.95)}
+  .btn-pink:hover{box-shadow:0 6px 24px rgba(255,85,141,0.5);transform:translateY(-2px)}
+
+  .btn-outline{
+    background:white;color:var(--pink3);
+    border:2px solid var(--pink2);border-radius:50px;padding:12px 32px;
+    font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;
+    cursor:pointer;transition:all 0.22s;
+  }
+  .btn-outline:hover{background:var(--pink4)}
+
+  /* PASSCODE PAGE */
+  .passcode-display{
+    background:rgba(255,182,193,0.18);border:2px dashed var(--pink);
+    border-radius:16px;padding:16px 24px;font-size:2.2rem;letter-spacing:12px;
+    color:var(--pink3);min-width:180px;text-align:center;margin:16px 0;
+    font-weight:800;min-height:64px;
+  }
+  .heart-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+    max-width:280px;margin:0 auto;
+  }
+  .heart-btn{
+    background:white;border:2px solid var(--pink);border-radius:20px;
+    width:76px;height:76px;font-size:1.5rem;font-weight:800;color:#E05080;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;box-shadow:0 4px 14px rgba(255,100,130,0.15);
+    transition:all 0.18s;font-family:'Nunito',sans-serif;
+  }
+  .heart-btn:active{transform:scale(0.92);background:var(--pink4)}
+  .heart-btn .heart-icon{font-size:0.75rem;color:var(--pink);margin-top:2px}
+
+  /* PUPPY SVG */
+  .puppy-wrap{display:flex;justify-content:center;margin:10px 0}
+
+  /* LETTER BY LETTER ANIMATION */
+  .letter-reveal span{
+    display:inline-block;opacity:0;transform:translateY(20px) scale(0.7);
+    transition:all 0.4s;
+  }
+  .letter-reveal span.show{opacity:1;transform:translateY(0) scale(1)}
+
+  /* CAKE PAGE */
+  .candle{transition:opacity 0.5s}
+  .candle.out .flame{display:none}
+  .candle.out .wick{fill:#555}
+
+  /* GIFT BUTTONS */
+  .gift-grid{display:flex;flex-direction:column;gap:14px;width:100%;max-width:340px}
+  .gift-btn{
+    background:white;border:2px solid var(--pink);border-radius:20px;
+    padding:18px 24px;cursor:pointer;display:flex;align-items:center;gap:16px;
+    box-shadow:0 4px 16px rgba(255,100,130,0.12);transition:all 0.22s;
+    font-family:'Nunito',sans-serif;
+  }
+  .gift-btn:active{transform:scale(0.97)}
+  .gift-btn:hover{background:var(--pink5);border-color:var(--pink2);transform:translateX(4px)}
+  .gift-icon{font-size:2.2rem;min-width:44px;text-align:center}
+  .gift-text{text-align:left}
+  .gift-text strong{display:block;color:#C0305A;font-size:1rem;font-weight:800}
+  .gift-text span{color:#D06080;font-size:0.85rem}
+
+  /* PHOTO PAGE */
+  .photo-frame{
+    border:6px solid white;border-radius:20px;
+    box-shadow:0 8px 32px rgba(255,100,130,0.25),0 0 0 2px var(--pink);
+    overflow:hidden;width:100%;max-width:320px;margin:0 auto;
+    background:var(--pink5);min-height:220px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .photo-placeholder{
+    width:100%;padding:40px 20px;text-align:center;
+    font-size:4rem;color:var(--pink);
+  }
+
+  /* LOVE LETTER */
+  .letter-paper{
+    background:linear-gradient(180deg,#FFF8FA 0%,white 100%);
+    border-radius:20px;padding:28px 24px;
+    box-shadow:0 8px 32px rgba(255,100,130,0.12);
+    border:1.5px solid rgba(255,182,193,0.5);
+    position:relative;overflow:hidden;
+    font-family:'Dancing Script',cursive;font-size:1.05rem;
+    line-height:1.9;color:#8B3060;
+  }
+  .letter-paper::before{
+    content:'';position:absolute;inset:0;
+    background:repeating-linear-gradient(transparent,transparent 38px,rgba(255,182,193,0.25) 38px,rgba(255,182,193,0.25) 39px);
+  }
+  .letter-paper>*{position:relative}
+  .sticker{display:inline-block;font-size:1.5rem;margin:0 4px}
+
+  /* GALLERY */
+  .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:400px}
+  .gallery-item{
+    background:white;border-radius:16px;overflow:hidden;
+    box-shadow:0 4px 16px rgba(255,100,130,0.12);
+    border:2px solid var(--pink4);
+  }
+  .gallery-photo{
+    width:100%;aspect-ratio:1;background:var(--pink5);
+    display:flex;align-items:center;justify-content:center;
+    font-size:3rem;
+  }
+  .gallery-caption{
+    padding:8px;font-size:0.75rem;font-family:'Dancing Script',cursive;
+    color:#C0305A;text-align:center;font-weight:600;
+  }
+
+  /* MUSIC PLAYER */
+  .player-card{
+    background:linear-gradient(135deg,#FFF0F3,white);
+    border-radius:24px;padding:24px;
+    box-shadow:0 8px 32px rgba(255,100,130,0.18);
+    border:2px solid var(--pink4);width:100%;max-width:380px;
+  }
+  .vinyl{
+    width:140px;height:140px;border-radius:50%;margin:0 auto;
+    background:conic-gradient(#1a1a2e,#3a1a3a,#1a1a2e,#3a1a3a,#1a1a2e);
+    display:flex;align-items:center;justify-content:center;position:relative;
+    box-shadow:0 8px 24px rgba(0,0,0,0.3);
+  }
+  .vinyl.spinning{animation:spin 3s linear infinite}
+  .vinyl-center{
+    width:40px;height:40px;border-radius:50%;
+    background:linear-gradient(135deg,var(--pink2),var(--pink3));
+    box-shadow:0 0 0 3px white;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .play-btn{
+    width:60px;height:60px;border-radius:50%;
+    background:linear-gradient(135deg,var(--pink2),var(--pink3));
+    border:none;cursor:pointer;font-size:1.5rem;color:white;
+    box-shadow:0 4px 16px rgba(255,85,141,0.4);transition:all 0.2s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .play-btn:active{transform:scale(0.92)}
+  .progress-bar{
+    width:100%;height:6px;background:var(--pink4);border-radius:3px;
+    overflow:hidden;cursor:pointer;margin:8px 0;
+  }
+  .progress-fill{
+    height:100%;background:linear-gradient(90deg,var(--pink2),var(--pink3));
+    border-radius:3px;width:0%;transition:width 0.5s;
+  }
+
+  /* FINAL PAGE */
+  .final-text{
+    font-family:'Pacifico',cursive;font-size:2rem;
+    background:linear-gradient(135deg,var(--pink3),#FF006E,#FF4DA6);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;text-align:center;line-height:1.5;
+  }
+  .confetti-item{
+    position:fixed;pointer-events:none;font-size:1.2rem;
+    animation:fall linear forwards;z-index:999;
+  }
+  @keyframes fall{
+    0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+  }
+  .float-heart{
+    position:fixed;pointer-events:none;font-size:1.5rem;
+    animation:floatUp linear forwards;z-index:999;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) scale(0.5);opacity:0}
+    20%{opacity:1;transform:translateY(-20px) scale(1)}
+    100%{transform:translateY(-80vh) scale(0.8);opacity:0}
+  }
+
+  /* FLOATING DECO */
+  .deco-float{animation:deco 3s ease-in-out infinite alternate}
+  @keyframes deco{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+
+  /* BOUNCE */
+  .bounce{animation:bounce 1s ease-in-out infinite alternate}
+  @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+
+  /* SPARKLE */
+  .sparkle{
+    position:relative;display:inline-block;
+  }
+  .sparkle::after{
+    content:'✨';position:absolute;top:-10px;right:-15px;
+    font-size:0.8rem;animation:twinkle 1.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+
+  /* WRONG SHAKE */
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+  .shake{animation:shake 0.4s ease}
+
+  /* PROGRESS DOTS */
+  .progress-dots{
+    display:flex;gap:6px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;
+  }
+  .dot{
+    width:8px;height:8px;border-radius:50%;background:var(--pink4);
+    transition:all 0.3s;
+  }
+  .dot.done{background:var(--pink3);transform:scale(1.2)}
+
+  /* DIVIDER */
+  .divider{
+    width:80px;height:3px;border-radius:2px;margin:10px auto;
+    background:linear-gradient(90deg,transparent,var(--pink),transparent);
+  }
+
+  /* WISH ANIMATION */
+  @keyframes candlePuff{
+    0%{transform:scale(1);opacity:1}
+    50%{transform:scale(1.5);opacity:0.5}
+    100%{transform:scale(2);opacity:0}
+  }
+  .puff{animation:candlePuff 0.6s ease-out forwards}
+
+  /* SCROLL */
+  ::-webkit-scrollbar{width:4px}
+  ::-webkit-scrollbar-thumb{background:var(--pink);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1: PASSCODE ============ -->
+<div class="page active" id="page1">
+  <div style="text-align:center;margin-bottom:8px;margin-top:16px">
+    <div style="font-size:2.2rem">🌸</div>
+    <p style="font-family:'Dancing Script',cursive;font-size:1.2rem;color:#D06080;margin:4px 0">A little surprise for you</p>
+    <h1 style="font-size:1.6rem;margin:4px 0">Enter the Code 💕</h1>
+    <p style="font-size:0.85rem;color:#D09090;margin-top:4px">Hint: the date we first talked 🌹</p>
+  </div>
+
+  <!-- Puppy SVG with flowers -->
+  <div class="puppy-wrap deco-float" style="margin:8px 0">
+    <svg width="150" height="160" viewBox="0 0 150 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Body -->
+      <ellipse cx="75" cy="120" rx="35" ry="30" fill="#F5C5A3"/>
+      <!-- Legs -->
+      <rect x="50" y="138" width="16" height="18" rx="8" fill="#F0B892"/>
+      <rect x="84" y="138" width="16" height="18" rx="8" fill="#F0B892"/>
+      <!-- Tail -->
+      <path d="M108 110 Q125 95 118 82" stroke="#F0B892" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <!-- Arms holding flowers -->
+      <path d="M42 110 Q28 100 22 90" stroke="#F0B892" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M108 110 Q118 105 122 98" stroke="#F0B892" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <!-- Head -->
+      <ellipse cx="75" cy="80" rx="32" ry="30" fill="#F5C5A3"/>
+      <!-- Ears -->
+      <ellipse cx="48" cy="65" rx="14" ry="18" fill="#E8A882" transform="rotate(-15 48 65)"/>
+      <ellipse cx="102" cy="65" rx="14" ry="18" fill="#E8A882" transform="rotate(15 102 65)"/>
+      <ellipse cx="48" cy="65" rx="9" ry="13" fill="#F5B5A0" transform="rotate(-15 48 65)"/>
+      <ellipse cx="102" cy="65" rx="9" ry="13" fill="#F5B5A0" transform="rotate(15 102 65)"/>
+      <!-- Face -->
+      <circle cx="65" cy="76" r="4" fill="#3A2010"/>
+      <circle cx="85" cy="76" r="4" fill="#3A2010"/>
+      <circle cx="66" cy="75" r="1.5" fill="white"/>
+      <circle cx="86" cy="75" r="1.5" fill="white"/>
+      <ellipse cx="75" cy="87" rx="8" ry="5" fill="#E88888"/>
+      <path d="M68 91 Q75 97 82 91" stroke="#C05060" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Nose -->
+      <ellipse cx="75" cy="84" rx="5" ry="3.5" fill="#C07070"/>
+      <!-- Blush -->
+      <ellipse cx="58" cy="85" rx="7" ry="4" fill="rgba(255,120,120,0.3)"/>
+      <ellipse cx="92" cy="85" rx="7" ry="4" fill="rgba(255,120,120,0.3)"/>
+      <!-- Bow on head -->
+      <path d="M67 55 Q75 50 83 55 Q75 60 67 55Z" fill="#FF85A1"/>
+      <circle cx="75" cy="56" r="3" fill="#FF4D8D"/>
+      <!-- Flowers held -->
+      <!-- Left flower -->
+      <circle cx="22" cy="83" r="7" fill="#FFD6E0"/>
+      <circle cx="15" cy="78" r="5" fill="#FFB6C1"/>
+      <circle cx="22" cy="74" r="5" fill="#FFD6E0"/>
+      <circle cx="29" cy="78" r="5" fill="#FFB6C1"/>
+      <circle cx="22" cy="83" r="4" fill="#FFEEC8"/>
+      <!-- Right flower -->
+      <circle cx="122" cy="90" r="7" fill="#FFD6E0"/>
+      <circle cx="115" cy="85" r="5" fill="#FFB6C1"/>
+      <circle cx="122" cy="81" r="5" fill="#FFD6E0"/>
+      <circle cx="129" cy="85" r="5" fill="#FFB6C1"/>
+      <circle cx="122" cy="90" r="4" fill="#FFEEC8"/>
+      <!-- Stars/sparkles -->
+      <text x="5" y="70" font-size="12">✨</text>
+      <text x="128" y="72" font-size="12">🌸</text>
+    </svg>
+  </div>
+
+  <div class="card" style="max-width:320px;text-align:center;padding:20px">
+    <div class="passcode-display" id="passcode-display">
+      <span id="code-show">_ _ _ _</span>
+    </div>
+    <p id="code-error" style="color:#FF4D8D;font-size:0.82rem;min-height:18px;font-weight:700"></p>
+    <div class="heart-grid" style="margin-top:12px">
+      <button class="heart-btn" onclick="pressCode(1)">1<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="pressCode(2)">2<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="pressCode(3)">3<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="pressCode(4)">4<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="pressCode(5)">5<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="pressCode(6)">6<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="pressCode(7)">7<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="pressCode(8)">8<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="pressCode(9)">9<span class="heart-icon">♡</span></button>
+      <button class="heart-btn" onclick="clearCode()" style="font-size:1rem;color:#D08090">⌫<span class="heart-icon">del</span></button>
+      <button class="heart-btn" onclick="pressCode(0)">0<span class="heart-icon">♡</span></button>
+      <button class="heart-btn btn-pink" onclick="checkCode()" style="border:none;font-size:0.9rem;color:white;height:76px;border-radius:20px">OK<span class="heart-icon" style="color:rgba(255,255,255,0.7)">→</span></button>
+    </div>
+  </div>
+  <p style="font-size:0.75rem;color:#DBA0B0;margin-top:14px;text-align:center">Default code: 1234 (change in code)</p>
+</div>
+
+<!-- ============ PAGE 2: BIRTHDAY PUPPY ============ -->
+<div class="page" id="page2">
+  <div class="progress-dots" id="dots2"></div>
+  <div style="text-align:center;margin-top:16px">
+    <div class="letter-reveal" id="bday-text" style="font-family:'Pacifico',cursive;font-size:1.6rem;color:var(--pink3);line-height:1.8;margin:10px 0"></div>
+    <div class="divider"></div>
+  </div>
+
+  <!-- Birthday puppy with hat -->
+  <div class="puppy-wrap deco-float" style="margin:12px 0">
+    <svg width="170" height="200" viewBox="0 0 170 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Cake held -->
+      <rect x="100" y="140" width="45" height="35" rx="6" fill="#FFB6C1"/>
+      <rect x="100" y="128" width="45" height="18" rx="4" fill="#FF85A1"/>
+      <rect x="103" y="118" width="6" height="16" rx="3" fill="#F5C5A3"/>
+      <rect x="114" y="118" width="6" height="16" rx="3" fill="#F5C5A3"/>
+      <rect x="125" y="118" width="6" height="16" rx="3" fill="#F5C5A3"/>
+      <!-- Candles flames -->
+      <ellipse cx="106" cy="115" rx="3" ry="5" fill="#FFD700"/>
+      <ellipse cx="117" cy="115" rx="3" ry="5" fill="#FFD700"/>
+      <ellipse cx="128" cy="115" rx="3" ry="5" fill="#FFD700"/>
+      <!-- Cake deco -->
+      <circle cx="112" cy="147" r="3" fill="white"/>
+      <circle cx="123" cy="152" r="3" fill="white"/>
+      <circle cx="134" cy="147" r="3" fill="white"/>
+      <!-- Body -->
+      <ellipse cx="75" cy="145" rx="38" ry="35" fill="#F5C5A3"/>
+      <!-- Legs -->
+      <rect x="52" y="165" width="18" height="22" rx="9" fill="#F0B892"/>
+      <rect x="78" y="165" width="18" height="22" rx="9" fill="#F0B892"/>
+      <!-- Arm holding cake -->
+      <path d="M108 135 Q120 130 122 122" stroke="#F0B892" stroke-width="9" stroke-linecap="round" fill="none"/>
+      <!-- Other arm -->
+      <path d="M42 135 Q30 125 28 118" stroke="#F0B892" stroke-width="9" stroke-linecap="round" fill="none"/>
+      <!-- Head -->
+      <ellipse cx="75" cy="100" rx="34" ry="32" fill="#F5C5A3"/>
+      <!-- Ears -->
+      <ellipse cx="46" cy="85" rx="15" ry="20" fill="#E8A882" transform="rotate(-15 46 85)"/>
+      <ellipse cx="104" cy="85" rx="15" ry="20" fill="#E8A882" transform="rotate(15 104 85)"/>
+      <ellipse cx="46" cy="85" rx="10" ry="14" fill="#F5B5A0" transform="rotate(-15 46 85)"/>
+      <ellipse cx="104" cy="85" rx="10" ry="14" fill="#F5B5A0" transform="rotate(15 104 85)"/>
+      <!-- Birthday hat -->
+      <polygon points="75,45 55,92 95,92" fill="#FF85A1"/>
+      <polygon points="75,45 55,92 95,92" fill="url(#hatPattern)" opacity="0.4"/>
+      <ellipse cx="75" cy="92" rx="20" ry="5" fill="#FFB6C1"/>
+      <circle cx="75" cy="44" r="6" fill="#FFD700"/>
+      <path d="M72 38 Q75 28 78 38" stroke="#FFD700" stroke-width="2" fill="none"/>
+      <!-- Hat stars -->
+      <text x="62" y="72" font-size="10" fill="white">★</text>
+      <text x="78" y="80" font-size="8" fill="white">★</text>
+      <!-- Face -->
+      <circle cx="64" cy="97" r="4.5" fill="#3A2010"/>
+      <circle cx="86" cy="97" r="4.5" fill="#3A2010"/>
+      <circle cx="65" cy="96" r="1.8" fill="white"/>
+      <circle cx="87" cy="96" r="1.8" fill="white"/>
+      <ellipse cx="75" cy="110" rx="9" ry="6" fill="#E88888"/>
+      <path d="M67 114 Q75 121 83 114" stroke="#C05060" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="75" cy="106" rx="5.5" ry="4" fill="#C07070"/>
+      <ellipse cx="62" cy="107" rx="7" ry="5" fill="rgba(255,120,120,0.3)"/>
+      <ellipse cx="88" cy="107" rx="7" ry="5" fill="rgba(255,120,120,0.3)"/>
+      <!-- Floating hearts -->
+      <text x="20" y="55" font-size="14">💕</text>
+      <text x="128" y="58" font-size="12">🌟</text>
+      <text x="10" y="110" font-size="10">✨</text>
+      <defs>
+        <pattern id="hatPattern" patternUnits="userSpaceOnUse" width="12" height="12">
+          <circle cx="6" cy="6" r="2" fill="white"/>
+        </pattern>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="card" style="text-align:center;max-width:340px">
+    <p style="font-family:'Dancing Script',cursive;font-size:1.1rem;color:#D08090;line-height:1.7">
+      Today is your special day 🌸<br>You deserve all the love in the world! 💕
+    </p>
+    <div style="margin-top:16px">
+      <button class="btn-pink" onclick="goTo(3)">Next 🌸</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PAGE 3: MAKE A WISH ============ -->
+<div class="page" id="page3">
+  <div class="progress-dots" id="dots3"></div>
+  <div style="text-align:center;margin-top:16px">
+    <h1 style="font-size:1.8rem">Make a Wish ✨</h1>
+    <p style="font-family:'Dancing Script',cursive;color:#D08090;font-size:1.1rem;margin-top:6px">Close your eyes... and wish 💫</p>
+    <div class="divider"></div>
+  </div>
+
+  <!-- Birthday cake SVG -->
+  <div class="puppy-wrap" style="margin:16px 0">
+    <svg id="cake-svg" width="200" height="210" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Plate -->
+      <ellipse cx="100" cy="190" rx="75" ry="12" fill="#F0D0D8"/>
+      <ellipse cx="100" cy="187" rx="72" ry="9" fill="#FFE0E8"/>
+      <!-- Cake bottom tier -->
+      <rect x="30" y="148" width="140" height="40" rx="8" fill="#FFB6C1"/>
+      <rect x="25" y="145" width="150" height="14" rx="7" fill="#FF85A1"/>
+      <!-- Cream drips bottom -->
+      <path d="M30 145 Q40 140 50 145 Q60 140 70 145 Q80 140 90 145 Q100 140 110 145 Q120 140 130 145 Q140 140 150 145 Q160 140 170 145" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <!-- Deco dots bottom -->
+      <circle cx="55" cy="165" r="5" fill="white" opacity="0.6"/>
+      <circle cx="100" cy="160" r="5" fill="white" opacity="0.6"/>
+      <circle cx="145" cy="165" r="5" fill="white" opacity="0.6"/>
+      <circle cx="75" cy="170" r="4" fill="#FFD6E0" opacity="0.8"/>
+      <circle cx="125" cy="170" r="4" fill="#FFD6E0" opacity="0.8"/>
+      <!-- Cake top tier -->
+      <rect x="48" y="103" width="104" height="45" rx="8" fill="#FF85A1"/>
+      <rect x="44" y="100" width="112" height="14" rx="7" fill="#FF4D8D"/>
+      <!-- Cream drips top -->
+      <path d="M48 100 Q60 94 72 100 Q84 94 96 100 Q108 94 120 100 Q132 94 144 100 Q152 95 152 100" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- Stars on middle tier -->
+      <text x="65" y="128" font-size="11" fill="white" opacity="0.9">★</text>
+      <text x="94" y="133" font-size="9" fill="white" opacity="0.9">★</text>
+      <text x="120" y="128" font-size="11" fill="white" opacity="0.9">★</text>
+      <!-- Flowers on cake -->
+      <circle cx="75" cy="155" r="6" fill="#FFD6E0"/>
+      <circle cx="70" cy="150" r="4" fill="#FFB6C1"/>
+      <circle cx="75" cy="147" r="4" fill="#FFD6E0"/>
+      <circle cx="80" cy="150" r="4" fill="#FFB6C1"/>
+      <circle cx="75" cy="155" r="3.5" fill="#FFEEC8"/>
+      <circle cx="125" cy="155" r="6" fill="#FFD6E0"/>
+      <circle cx="120" cy="150" r="4" fill="#FFB6C1"/>
+      <circle cx="125" cy="147" r="4" fill="#FFD6E0"/>
+      <circle cx="130" cy="150" r="4" fill="#FFB6C1"/>
+      <circle cx="125" cy="155" r="3.5" fill="#FFEEC8"/>
+      <!-- Candles -->
+      <g class="candle" id="candle1">
+        <rect x="70" y="72" width="9" height="30" rx="4" fill="#FFE4B5"/>
+        <ellipse cx="74.5" cy="98" rx="3" ry="1.5" fill="#F0C060"/>
+        <ellipse class="flame" cx="74.5" cy="66" rx="6" ry="9" fill="#FFD700"/>
+        <ellipse class="flame" cx="74.5" cy="66" rx="4" ry="6" fill="#FF8C00"/>
+        <ellipse class="flame" cx="74.5" cy="68" rx="2" ry="3" fill="white" opacity="0.7"/>
+      </g>
+      <g class="candle" id="candle2">
+        <rect x="95" y="68" width="9" height="34" rx="4" fill="#FFB6C1"/>
+        <ellipse cx="99.5" cy="98" rx="3" ry="1.5" fill="#E09090"/>
+        <ellipse class="flame" cx="99.5" cy="62" rx="6" ry="9" fill="#FFD700"/>
+        <ellipse class="flame" cx="99.5" cy="62" rx="4" ry="6" fill="#FF8C00"/>
+        <ellipse class="flame" cx="99.5" cy="64" rx="2" ry="3" fill="white" opacity="0.7"/>
+      </g>
+      <g class="candle" id="candle3">
+        <rect x="120" y="72" width="9" height="30" rx="4" fill="#E8D5F5"/>
+        <ellipse cx="124.5" cy="98" rx="3" ry="1.5" fill="#C0A0D0"/>
+        <ellipse class="flame" cx="124.5" cy="66" rx="6" ry="9" fill="#FFD700"/>
+        <ellipse class="flame" cx="124.5" cy="66" rx="4" ry="6" fill="#FF8C00"/>
+        <ellipse class="flame" cx="124.5" cy="68" rx="2" ry="3" fill="white" opacity="0.7"/>
+      </g>
+    </svg>
+  </div>
+
+  <div style="text-align:center">
+    <button class="btn-pink bounce" id="blow-btn" onclick="blowCandles()">💨 Blow the candles!</button>
+    <p id="wish-msg" style="font-family:'Dancing Script',cursive;font-size:1.25rem;color:var(--pink3);margin-top:14px;min-height:32px;opacity:0;transition:opacity 0.8s"></p>
+  </div>
+  <div style="margin-top:16px">
+    <button class="btn-outline" onclick="goTo(4)">Continue →</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 4: CHOOSE A GIFT ============ -->
+<div class="page" id="page4">
+  <div class="progress-dots" id="dots4"></div>
+  <div style="text-align:center;margin-top:16px">
+    <div class="deco-float" style="font-size:2.5rem">🎁</div>
+    <h1 style="font-size:1.7rem;margin-top:6px">Choose a Gift</h1>
+    <p style="font-family:'Dancing Script',cursive;color:#D08090;font-size:1.1rem">Pick one to open... 🎀</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="gift-grid" style="margin-top:12px">
+    <button class="gift-btn" onclick="goTo(5)">
+      <div class="gift-icon">📸</div>
+      <div class="gift-text">
+        <strong>Polaroid Camera</strong>
+        <span>A captured memory just for you ✨</span>
+      </div>
+    </button>
+    <button class="gift-btn" onclick="goTo(6)">
+      <div class="gift-icon">💌</div>
+      <div class="gift-text">
+        <strong>Message in a Bottle</strong>
+        <span>A letter from the heart 🌊</span>
+      </div>
+    </button>
+    <button class="gift-btn" onclick="goTo(7)">
+      <div class="gift-icon">⭐</div>
+      <div class="gift-text">
+        <strong>Wishing Star</strong>
+        <span>Memories trapped in starlight 🌟</span>
+      </div>
+    </button>
+  </div>
+  <p style="font-size:0.8rem;color:#DBA0B0;margin-top:16px;font-family:'Dancing Script',cursive;font-size:1rem">
+    (You can come back to choose another! 💕)
+  </p>
+</div>
+
+<!-- ============ PAGE 5: PHOTO ============ -->
+<div class="page" id="page5">
+  <div class="progress-dots" id="dots5"></div>
+  <div style="text-align:center;margin-top:10px">
+    <h2 style="font-size:2rem">📸 Click!</h2>
+    <p style="font-family:'Dancing Script',cursive;color:#D08090;font-size:1.15rem">Who is this beautiful person? 🌹</p>
+  </div>
+
+  <div style="position:relative;margin:14px 0;width:100%;max-width:320px">
+    <!-- Polaroid frame -->
+    <div style="background:white;border-radius:8px;padding:12px 12px 48px;box-shadow:0 10px 40px rgba(0,0,0,0.15),0 2px 8px rgba(255,100,130,0.2);transform:rotate(-1.5deg)">
+      <div class="photo-frame" style="border:none;border-radius:4px;transform:none;box-shadow:none">
+        <div class="photo-placeholder">
+          🖼️<br>
+          <p style="font-size:0.75rem;color:#D09090;margin-top:8px;font-family:'Nunito',sans-serif">Add your photo here<br><span style="font-size:0.65rem">(edit HTML to add URL)</span></p>
+        </div>
+      </div>
+      <p style="font-family:'Dancing Script',cursive;font-size:1.1rem;color:#C05070;text-align:center;margin-top:8px">My favorite person 💕</p>
+    </div>
+
+    <!-- Stickers around photo -->
+    <div style="position:absolute;top:-12px;right:-8px;font-size:1.6rem;transform:rotate(15deg)">🌸</div>
+    <div style="position:absolute;bottom:20px;left:-14px;font-size:1.3rem;transform:rotate(-20deg)">💕</div>
+    <div style="position:absolute;top:20px;left:-10px;font-size:1.1rem;transform:rotate(10deg)">⭐</div>
+  </div>
+
+  <div class="card" style="text-align:center;max-width:340px">
+    <p style="font-family:'Dancing Script',cursive;font-size:1.2rem;color:#8B3060;line-height:1.7">
+      The most beautiful person I know 🌹<br>
+      This smile makes my whole world bright ✨
+    </p>
+  </div>
+  <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;justify-content:center">
+    <button class="btn-outline" onclick="goTo(4)">← Back</button>
+    <button class="btn-pink" onclick="goTo(9)">See the letter 💌</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 6: LOVE LETTER ============ -->
+<div class="page" id="page6">
+  <div class="progress-dots" id="dots6"></div>
+  <div style="text-align:center;margin-top:10px">
+    <div style="font-size:2.2rem" class="deco-float">💌</div>
+    <h2 style="font-size:2rem">A Letter For You</h2>
+    <div class="divider"></div>
+  </div>
+
+  <!-- Envelope opening animation area -->
+  <div style="width:100%;max-width:380px">
+    <div class="letter-paper" style="margin:10px 0">
+      <div style="text-align:right;margin-bottom:8px;font-size:0.95rem">
+        <span class="sticker">🌸</span><span class="sticker">💕</span><span class="sticker">✨</span>
+      </div>
+      <p style="font-size:1.3rem;margin-bottom:12px;color:#C0306A">My Dearest [Name],</p>
+      <p>
+        On this beautiful day that the universe chose to bring you into this world, I want you to know how incredibly special you are to me. 🌹
+      </p>
+      <br>
+      <p>
+        Every moment with you feels like a dream — your smile lights up even the darkest days, your laugh is my favorite song, and just knowing you exist makes this world a more beautiful place. 💫
+      </p>
+      <br>
+      <p>
+        You are more than I ever could have wished for. You are thoughtful, kind, beautiful inside and out — and I am the luckiest person to have you in my life. 🌸
+      </p>
+      <br>
+      <p>
+        Today I celebrate YOU — not just your birthday, but every tiny thing that makes you <em>you</em>. The way you laugh, the way your eyes sparkle, the way you make me feel at home just by being near. 💕
+      </p>
+      <br>
+      <p>
+        Here's to you, my love. May this year bring you everything your heart desires and more. I promise to be right here beside you through every season. 🎂
+      </p>
+      <br>
+      <p style="text-align:right;font-size:1.2rem;color:#C0306A">
+        Forever yours,<br>
+        <strong>[Your Name]</strong> 🌹
+      </p>
+      <div style="text-align:center;margin-top:10px;font-size:1.5rem">
+        <span class="sticker">💖</span><span class="sticker">🌸</span><span class="sticker">✨</span><span class="sticker">🎀</span><span class="sticker">💌</span>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;justify-content:center">
+    <button class="btn-outline" onclick="goTo(4)">← Back</button>
+    <button class="btn-pink" onclick="goTo(9)">See memories 📸</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 7: MEMORY GALLERY ============ -->
+<div class="page" id="page7">
+  <div class="progress-dots" id="dots7"></div>
+  <div style="text-align:center;margin-top:10px">
+    <div style="font-size:2rem" class="deco-float">⭐</div>
+    <h2 style="font-size:2rem">Our Memories</h2>
+    <p style="font-family:'Dancing Script',cursive;color:#D08090;font-size:1rem">moments I never want to forget 💕</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="gallery-grid" style="margin:12px 0">
+    <div class="gallery-item">
+      <div class="gallery-photo">🌅</div>
+      <div class="gallery-caption">our first sunrise 🌸</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-photo">🌊</div>
+      <div class="gallery-caption">dancing in the rain 💕</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-photo">🌸</div>
+      <div class="gallery-caption">when you smiled 🌹</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-photo">🌙</div>
+      <div class="gallery-caption">late night talks ✨</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-photo">☕</div>
+      <div class="gallery-caption">our coffee dates 🎀</div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-photo">🌟</div>
+      <div class="gallery-caption">stargazing together 💫</div>
+    </div>
+  </div>
+  <p style="font-size:0.8rem;color:#D09090;text-align:center;font-family:'Dancing Script',cursive;font-size:0.95rem">
+    Replace emoji with your actual photos in the HTML 💕
+  </p>
+  <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;justify-content:center">
+    <button class="btn-outline" onclick="goTo(4)">← Back</button>
+    <button class="btn-pink" onclick="goTo(8)">🎵 Listen to our song</button>
+  </div>
+</div>
+
+<!-- ============ PAGE 8: MUSIC PLAYER ============ -->
+<div class="page" id="page8">
+  <div class="progress-dots" id="dots8"></div>
+  <div style="text-align:center;margin-top:10px">
+    <div style="font-size:2rem" class="deco-float">🎵</div>
+    <h2>Our Song</h2>
+    <p style="font-family:'Dancing Script',cursive;color:#D08090;font-size:1rem">play this and think of me 💕</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="player-card" style="margin:12px 0">
+    <!-- Album art -->
+    <div style="text-align:center;margin-bottom:16px">
+      <div class="vinyl" id="vinyl">
+        <div class="vinyl-center"></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:14px">
+      <p style="font-family:'Dancing Script',cursive;font-size:1.5rem;color:#C0306A;font-weight:700">Perfect</p>
+      <p style="color:#D08090;font-size:0.9rem">Ed Sheeran • 2017</p>
+      <p style="font-size:0.75rem;color:#DBA0B0;margin-top:4px;font-family:'Dancing Script',cursive">
+        "you look perfect tonight" 💕
+      </p>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-bar" onclick="seekPlayer(event)" id="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#D090A0;margin:4px 0 10px">
+      <span id="cur-time">0:00</span>
+      <span>4:23</span>
+    </div>
+
+    <!-- Controls -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:20px">
+      <button style="background:none;border:none;cursor:pointer;font-size:1.5rem;color:var(--pink2)" onclick="prevTrack()">⏮</button>
+      <button class="play-btn" id="play-btn" onclick="togglePlay()">▶</button>
+      <button style="background:none;border:none;cursor:pointer;font-size:1.5rem;color:var(--pink2)" onclick="nextTrack()">⏭</button>
+    </div>
+
+    <!-- Song link hint -->
+    <div style="margin-top:16px;background:var(--pink5);border-radius:12px;padding:12px;text-align:center">
+      <p style="font-size:0.8rem;color:#D08090;font-family:'Dancing Script',cursive;font-size:0.95rem">
+        🎵 Add your song link in the HTML<br>
+        or embed a YouTube/Spotify player below 💕
+      </p>
+    </div>
+  </div>
+
+  <button class="btn-pink" onclick="goTo(9)" style="margin-top:8px">See the finale 🎉</button>
+</div>
+
+<!-- ============ PAGE 9: FINAL ============ -->
+<div class="page" id="page9">
+  <div style="text-align:center;margin-top:20px;width:100%;max-width:400px">
+    <!-- Animated title -->
+    <div class="final-text" id="final-title" style="font-size:1.9rem;line-height:1.5;margin-bottom:12px">
+      Happy Birthday<br>My Love ❤️
+    </div>
+
+    <!-- Big cake emoji -->
+    <div class="deco-float" style="font-size:4rem;margin:16px 0">🎂</div>
+
+    <!-- Floating elements display area -->
+    <div style="font-size:2rem;letter-spacing:8px;margin:8px 0">
+      🌸 💕 ✨ 🎀 🌹
+    </div>
+
+    <!-- Personal message card -->
+    <div class="card" style="margin:16px 0;background:linear-gradient(135deg,rgba(255,240,243,0.95),rgba(255,255,255,0.95))">
+      <p style="font-family:'Dancing Script',cursive;font-size:1.2rem;color:#8B3060;line-height:1.8">
+        On this wonderful day, I just want to tell you — you are my favorite adventure, my safe place, my biggest joy. 🌸
+        <br><br>
+        Thank you for existing. Thank you for being you. I love you more than any words could ever say. 💕
+        <br><br>
+        <strong style="color:var(--pink3);font-size:1.3rem">Happy Birthday, my love! 🎉</strong>
+      </p>
+    </div>
+
+    <!-- Confetti button -->
+    <button class="btn-pink bounce" onclick="launchCelebration()" style="font-size:1.1rem;padding:16px 40px">
+      🎉 Celebrate! 🎉
+    </button>
+
+    <!-- Start over -->
+    <button class="btn-outline" onclick="goTo(1)" style="margin-top:12px;font-size:0.85rem">
+      💕 From the beginning
+    </button>
+  </div>
+</div>
+
+<!-- CONFETTI CONTAINER -->
+<div id="confetti-container"></div>
+
+<script>
+  const CORRECT_CODE = "1234"; // ← Change this passcode!
+  const NAME = "My Love"; // ← Change the birthday person's name!
+
+  let enteredCode = "";
+  let playing = false;
+  let playerInterval = null;
+  let playerTime = 0;
+  const TOTAL_DURATION = 263;
+  let candlesBlown = false;
+  let currentPage = 1;
+
+  // ─── CODE ENTRY ───
+  function pressCode(n) {
+    if (enteredCode.length < 4) {
+      enteredCode += n;
+      updateCodeDisplay();
+    }
+  }
+  function clearCode() {
+    enteredCode = enteredCode.slice(0, -1);
+    updateCodeDisplay();
+  }
+  function updateCodeDisplay() {
+    const s = document.getElementById('code-show');
+    let d = '';
+    for (let i = 0; i < 4; i++) {
+      d += i < enteredCode.length ? '♥' : '_ ';
+    }
+    s.textContent = d.trim();
+  }
+  function checkCode() {
+    if (enteredCode === CORRECT_CODE) {
+      goTo(2);
+    } else {
+      const disp = document.getElementById('passcode-display');
+      disp.classList.add('shake');
+      document.getElementById('code-error').textContent = 'Wrong code 💔 Try again!';
+      setTimeout(() => { disp.classList.remove('shake'); }, 500);
+      enteredCode = '';
+      updateCodeDisplay();
+      setTimeout(() => { document.getElementById('code-error').textContent = ''; }, 2000);
+    }
+  }
+
+  // ─── PAGE TRANSITIONS ───
+  function goTo(n) {
+    const cur = document.getElementById('page' + currentPage);
+    const next = document.getElementById('page' + n);
+    if (!next) return;
+    cur.classList.add('exit');
+    setTimeout(() => {
+      cur.classList.remove('active', 'exit');
+      next.classList.add('active');
+      currentPage = n;
+      window.scrollTo(0, 0);
+      onPageLoad(n);
+    }, 400);
+  }
+
+  function onPageLoad(n) {
+    updateDots(n);
+    if (n === 2) startLetterReveal();
+    if (n === 9) startFinalPage();
+  }
+
+  // ─── PROGRESS DOTS ───
+  function updateDots(page) {
+    const pages = [2,3,4,5,6,7,8,9];
+    const id = 'dots' + page;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '';
+    pages.forEach((p, i) => {
+      const d = document.createElement('div');
+      d.className = 'dot' + (p <= page ? ' done' : '');
+      el.appendChild(d);
+    });
+  }
+
+  // ─── LETTER REVEAL ───
+  function startLetterReveal() {
+    const text = `Happy Birthday ${NAME}! 🎂`;
+    const container = document.getElementById('bday-text');
+    container.className = 'letter-reveal';
+    container.innerHTML = '';
+    [...text].forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.textContent = ch === ' ' ? '\u00A0' : ch;
+      container.appendChild(s);
+    });
+    const spans = container.querySelectorAll('span');
+    spans.forEach((s, i) => {
+      setTimeout(() => { s.classList.add('show'); }, i * 80);
+    });
+  }
+
+  // ─── CANDLES ───
+  function blowCandles() {
+    if (candlesBlown) return;
+    candlesBlown = true;
+    const btn = document.getElementById('blow-btn');
+    btn.textContent = '💨 Poof!';
+    btn.disabled = true;
+
+    ['candle1','candle2','candle3'].forEach((id, i) => {
+      setTimeout(() => {
+        document.getElementById(id).classList.add('out');
+        // Smoke puff
+        const svg = document.getElementById('cake-svg');
+        const positions = [{x:74,y:60},{x:99,y:56},{x:124,y:60}];
+        const p = positions[i];
+        const smoke = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+        smoke.setAttribute('cx', p.x);
+        smoke.setAttribute('cy', p.y);
+        smoke.setAttribute('rx', '8');
+        smoke.setAttribute('ry', '8');
+        smoke.setAttribute('fill', 'rgba(180,180,200,0.5)');
+        smoke.style.transition = 'all 0.6s';
+        svg.appendChild(smoke);
+        setTimeout(() => {
+          smoke.setAttribute('cy', p.y - 20);
+          smoke.setAttribute('rx', '14');
+          smoke.setAttribute('ry', '14');
+          smoke.setAttribute('fill', 'rgba(180,180,200,0)');
+        }, 50);
+        setTimeout(() => smoke.remove(), 700);
+      }, i * 300);
+    });
+
+    setTimeout(() => {
+      const msg = document.getElementById('wish-msg');
+      msg.textContent = '✨ Your wish has been sent to the stars! ✨';
+      msg.style.opacity = '1';
+    }, 1200);
+  }
+
+  // ─── MUSIC PLAYER (visual only) ───
+  function togglePlay() {
+    playing = !playing;
+    const btn = document.getElementById('play-btn');
+    const vinyl = document.getElementById('vinyl');
+    btn.innerHTML = playing ? '⏸' : '▶';
+    vinyl.classList.toggle('spinning', playing);
+    if (playing) {
+      playerInterval = setInterval(() => {
+        playerTime += 1;
+        if (playerTime >= TOTAL_DURATION) { playerTime = 0; }
+        updatePlayerUI();
+      }, 1000);
+    } else {
+      clearInterval(playerInterval);
+    }
+  }
+  function updatePlayerUI() {
+    const pct = (playerTime / TOTAL_DURATION) * 100;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    const m = Math.floor(playerTime / 60);
+    const s = playerTime % 60;
+    document.getElementById('cur-time').textContent = m + ':' + String(s).padStart(2,'0');
+  }
+  function seekPlayer(e) {
+    const bar = document.getElementById('progress-bar');
+    const rect = bar.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    playerTime = Math.round(pct * TOTAL_DURATION);
+    updatePlayerUI();
+  }
+  function prevTrack() { playerTime = 0; updatePlayerUI(); }
+  function nextTrack() { playerTime = 0; updatePlayerUI(); }
+
+  // ─── FINAL PAGE ───
+  function startFinalPage() {
+    const el = document.getElementById('final-title');
+    el.style.animation = 'none';
+    el.style.opacity = '0';
+    el.style.transform = 'scale(0.5)';
+    setTimeout(() => {
+      el.style.transition = 'all 1s cubic-bezier(0.175,0.885,0.32,1.275)';
+      el.style.opacity = '1';
+      el.style.transform = 'scale(1)';
+    }, 300);
+  }
+
+  function launchCelebration() {
+    spawnConfetti();
+    spawnHearts();
+  }
+
+  function spawnConfetti() {
+    const items = ['🌸','💕','✨','🎀','🌹','⭐','💖','🎊','🎉','🎂'];
+    const container = document.getElementById('confetti-container');
+    for (let i = 0; i < 30; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'confetti-item';
+        el.textContent = items[Math.floor(Math.random() * items.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.top = '-30px';
+        el.style.animationDuration = (2 + Math.random() * 2) + 's';
+        el.style.animationDelay = Math.random() * 0.5 + 's';
+        container.appendChild(el);
+        setTimeout(() => el.remove(), 4500);
+      }, i * 60);
+    }
+  }
+
+  function spawnHearts() {
+    const container = document.getElementById('confetti-container');
+    for (let i = 0; i < 15; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'float-heart';
+        el.textContent = ['💕','💖','💗','💝','❤️'][Math.floor(Math.random()*5)];
+        el.style.left = (10 + Math.random() * 80) + 'vw';
+        el.style.bottom = '10vh';
+        el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+        container.appendChild(el);
+        setTimeout(() => el.remove(), 3500);
+      }, i * 100);
+    }
+  }
+
+  // Init
+  updateCodeDisplay();
+</script>
+</body>
+</html>
